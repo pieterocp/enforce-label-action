@@ -1,6 +1,6 @@
 # Enforce PR labels
 
-Enforce assigning labels before merging PR's. Usefull for generating automatic changelog and release notes with `github-release-notes`
+Enforce assigning labels before merging PRs. Useful for generating automatic changelog and release notes with `github-release-notes`
 
 ## Example usage
 Create `.github/workflows/enforce-labels.yml` containing:
