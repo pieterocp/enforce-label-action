@@ -2,8 +2,8 @@ name: 'Enforce PR labels'
 description: 'Enforce PR labels'
 author: 'Yogev Ben David'
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
+  using: "node20"
+  main: "lib/main.js"
 inputs:
   REQUIRED_LABELS_ANY:
     description: 'Require at least one label'
