@@ -1,18 +1,22 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const core = require("@actions/core");
-const { run, enforceAllLabels, enforceAnyLabels, enforceBannedLabels } = require("../run.ts");
+import * as core from "@actions/core";
+import { run, enforceAllLabels, enforceAnyLabels, enforceBannedLabels } from "../run";
+import {beforeEach, describe, expect, it, jest} from '@jest/globals';
+import {Context} from "@actions/github/lib/context";
 
-// Mock core methods and input helpers
+
 jest.mock('@actions/core');
-const { setFailed, info, getInput } = core;
+const { setFailed, getInput } = core as unknown as {
+  setFailed: jest.MockedFunction<typeof core.setFailed>,
+  getInput: jest.MockedFunction<typeof core.getInput>
+};
 
-// Helper to mock getInput for different keys
-function mockGetInput(mapping) {
-  getInput.mockImplementation((name) => mapping[name] ?? '');
+function mockGetInput(mapping: Record<string, string>) {
+  getInput.mockImplementation((name: string) => mapping[name] ?? '');
 }
 
-// Helper to create label objects
-const label = (name) => ({ name });
+type Label = { name: string };
+const label = (name: string): Label => ({ name });
 
 describe('Label Enforcer', () => {
   beforeEach(() => {
@@ -110,7 +114,7 @@ describe('Label Enforcer', () => {
 
   describe('run', () => {
     it('fails if not pull_request event', () => {
-      run({ eventName: 'push', payload: {} });
+      run({ eventName: 'push', payload: {} } as unknown as Context);
       expect(setFailed).toHaveBeenCalledWith(
           expect.stringContaining('Invalid event')
       );
@@ -128,7 +132,7 @@ describe('Label Enforcer', () => {
         payload: {
           pull_request: { labels: [label('foo')] }
         }
-      });
+      } as unknown as Context);
       expect(setFailed).not.toHaveBeenCalled();
     });
   });

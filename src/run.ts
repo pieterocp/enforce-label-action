@@ -52,13 +52,11 @@ export function enforceBannedLabels(labels) {
 
 export function getInputArray(name: string): string[] {
   const rawInput = getInput(name, { required: false });
-  console.log(rawInput);
   return rawInput !== "" ? rawInput.split(",") : [];
 }
 
 export function getInputString(name: string, defaultValue): string {
   const rawInput = getInput(name, { required: false });
-  console.log(rawInput);
   return rawInput !== "" ? rawInput : defaultValue;
 }
 
