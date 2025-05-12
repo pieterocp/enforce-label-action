@@ -6,6 +6,7 @@
   "scripts": {
     "build": "tsc",
     "format": "prettier --write src/*.ts",
+    "lintCi": "prettier -c src/*.ts",
     "test": "jest"
   },
   "repository": {
