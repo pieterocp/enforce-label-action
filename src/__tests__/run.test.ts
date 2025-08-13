@@ -81,7 +81,6 @@ describe('Label Enforcer', () => {
   });
 
   describe('enforceBannedLabels', () => {
-
     it('does nothing if no banned labels', () => {
       mockGetInput({ 'BANNED_LABELS': '' });
       enforceBannedLabels([label('safe')]);
