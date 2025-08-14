@@ -27,13 +27,13 @@ jobs:
         with:
           cmd: lintCi
       - uses: borales/actions-yarn@v4
-        name: build the files
-        with:
-          cmd: build
-      - uses: borales/actions-yarn@v4
         name: Run unit tests with jest
         with:
           cmd: test
+      - uses: borales/actions-yarn@v4
+        name: Build files in js single file
+        with:
+          cmd: buildForAction
       - name: Check if dist output is up to date with sources files
         run: |
           if [ "$(git diff --ignore-space-at-eol dist/ | wc -l)" -gt "0" ]; then
