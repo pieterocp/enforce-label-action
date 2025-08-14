@@ -1,5 +1,6 @@
 FROM node:20.19.4-slim
 
+WORKDIR /app
 COPY . .
 
-ENTRYPOINT ["node", "/lib/main.js"]
+ENTRYPOINT ["node", "/app/dist/main.js"]
