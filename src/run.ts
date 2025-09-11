@@ -3,7 +3,7 @@ import { Context } from "@actions/github/lib/context";
 
 export function enforceAnyLabels(labels) {
   const requiredLabelsAny = getInputArray("REQUIRED_LABELS_ANY");
-  console.log(requiredLabelsAny);
+
   if (
     requiredLabelsAny.length > 0 &&
     !requiredLabelsAny.some((requiredLabel) =>
@@ -20,7 +20,7 @@ export function enforceAnyLabels(labels) {
 
 export function enforceAllLabels(labels) {
   const requiredLabelsAll = getInputArray("REQUIRED_LABELS_ALL");
-  console.log(requiredLabelsAll);
+
   if (
     !requiredLabelsAll.every((requiredLabel) =>
       labels.find((l) => l.name === requiredLabel)
@@ -36,8 +36,8 @@ export function enforceAllLabels(labels) {
 
 export function enforceBannedLabels(labels) {
   const bannedLabels = getInputArray("BANNED_LABELS");
-  console.log(bannedLabels);
   let bannedLabel;
+
   if (
     bannedLabels &&
     (bannedLabel = labels.find((l) => bannedLabels.includes(l.name)))
@@ -70,8 +70,6 @@ export const run = (context: Context) => {
   }
 
   const labels = context?.payload?.pull_request?.labels;
-
-  info(`Pull Request labels: "${labels}"`);
 
   enforceAnyLabels(labels);
   enforceAllLabels(labels);
