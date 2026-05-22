@@ -1,8 +1,10 @@
 name: Continuous Integration
 
+permissions: {}
+
 on:
   push:
-    branches: [main, add-ci]
+    branches: [main]
   pull_request:
     branches: [main]
 
@@ -14,26 +16,34 @@ jobs:
         node-version: [ 24.x ]
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-      - uses: borales/actions-yarn@v4
+      - name: Enable Corepack
+        run: |
+          corepack enable
+          corepack prepare yarn@4.15.0 --activate
+      - name: Cache Yarn dependencies
+        uses: actions/cache@v4
         with:
-          cmd: install
-      - uses: borales/actions-yarn@v4
-        name: lint the files
-        with:
-          cmd: lintCi
-      - uses: borales/actions-yarn@v4
-        name: Run unit tests with jest
-        with:
-          cmd: test
-      - uses: borales/actions-yarn@v4
-        name: Build files in js single file
-        with:
-          cmd: buildForAction
+          path: |
+            .yarn/cache
+            node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - name: Install dependencies
+        run: yarn install --immutable
+      - name: Lint the files
+        run: yarn lintCi
+      - name: Run unit tests with jest
+        run: yarn test
+      - name: Build files in js single file
+        run: yarn buildForAction
       - name: Check if dist output is up to date with sources files
         run: |
           if [ "$(git diff --ignore-space-at-eol dist/ | wc -l)" -gt "0" ]; then
